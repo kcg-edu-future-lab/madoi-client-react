@@ -1,6 +1,6 @@
 {
   "name": "madoi-client-react",
-  "version": "0.9.0",
+  "version": "0.1.0",
   "description": "",
   "main": "dist/madoi-react.umd.js",
   "module": "dist/madoi-react.es.js",
@@ -13,8 +13,10 @@
     }
   },
   "files": [
-    "dist/madoi-react.d.ts",
-    "dist/madoi-react.js",
+    "dist/madoi-react.es.ts",
+    "dist/madoi-react.umd.js",
+    "types/madoi-react.d.ts",
+    "types/madoi-react.d.ts.map",
     "LICENSE",
     "package-lock.json",
     "package.json",
