@@ -1,7 +1,7 @@
 {
   "name": "madoi-client-react",
   "version": "0.1.0",
-  "description": "",
+  "description": "A React Utilities for Madoi Client",
   "main": "dist/madoi-react.umd.js",
   "module": "dist/madoi-react.es.js",
   "types": "dist/madoi-react.d.ts",
