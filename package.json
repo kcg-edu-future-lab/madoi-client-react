@@ -1,6 +1,6 @@
 {
   "name": "madoi-client-react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A React Utilities for Madoi Client",
   "main": "dist/madoi-react.umd.js",
   "module": "dist/madoi-react.es.js",
@@ -55,6 +55,5 @@
     "vite": "^6.3.5",
     "madoi-client": "^0.9.0"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
