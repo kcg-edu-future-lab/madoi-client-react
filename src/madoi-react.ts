@@ -21,7 +21,10 @@ function getOrApplyValue<T>(prev: T, vof: ValueOrFunction<T>){
 
 @ShareClass({className: "State"})
 class State<T>{
-    constructor(private state: T){
+    private state: T;
+
+    constructor(state: T){
+        this.state = state;
     }
 
     @Share()
