@@ -13,7 +13,7 @@
     }
   },
   "files": [
-    "dist/madoi-react.es.ts",
+    "dist/madoi-react.es.js",
     "dist/madoi-react.umd.js",
     "types/madoi-react.d.ts",
     "types/madoi-react.d.ts.map",
@@ -30,7 +30,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kcg-edu-future-lab/madoi.git"
+    "url": "git+https://github.com/kcg-edu-future-lab/madoi-client-react.git"
   },
   "keywords": [
     "javascript",

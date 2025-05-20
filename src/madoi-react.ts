@@ -43,7 +43,7 @@ class State<T>{
     }
 }
 
-export function useMadoiState<T>(madoi: Madoi, initial: ValueOrFactory<T>): [T, (v: ValueOrFunction<T>)=>void]{
+export function useSharedState<T>(madoi: Madoi, initial: ValueOrFactory<T>): [T, (v: ValueOrFunction<T>)=>void]{
     const initialValue = useRef<T>(null!);
     const target = useRef<State<T>>(null!);
     const [_state, setState] = useState<any>();
@@ -99,7 +99,7 @@ export function useMadoiState<T>(madoi: Madoi, initial: ValueOrFactory<T>): [T, 
             getOrApplyValue(target.current?.getState(), vof))}];
 }
 
-export function useMadoiModel<T>(madoi: Madoi, model: ValueOrFactory<T>, renderOnStateChange = true): T {
+export function useSharedModel<T>(madoi: Madoi, model: ValueOrFactory<T>, renderOnStateChange = true): T {
     const target = useRef<T>(null!);
     const registered = useRef(false);
     const [_state, setState] = useState<any>();
