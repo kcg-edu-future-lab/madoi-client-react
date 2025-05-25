@@ -7,7 +7,7 @@ A React library for <a href="https://github.com/kcg-edu-future-lab/madoi">Distri
 ## Install
 
 ```bash
-npm i madoi-client-react
+npm i madoi-client madoi-client-react
 ```
 
 ## Getting started
