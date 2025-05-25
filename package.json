@@ -13,15 +13,15 @@
     }
   },
   "files": [
-    "dist/madoi-react.es.js",
-    "dist/madoi-react.umd.js",
-    "types/madoi-react.d.ts",
-    "types/madoi-react.d.ts.map",
+    "dist",
+    "src",
+    "types",
     "LICENSE",
     "package-lock.json",
     "package.json",
     "README.md",
-    "tsconfig.json"
+    "tsconfig.json",
+    "vite.config.ts"
   ],
   "scripts": {
     "build": "tsc && vite build",
@@ -54,7 +54,7 @@
     "react-dom": "^18.3.1",
     "typescript": "~5.8.3",
     "vite": "^6.3.5",
-    "madoi-client": "^0.9.0"
+    "madoi-client": "^0.1.0"
   },
   "dependencies": {}
 }
