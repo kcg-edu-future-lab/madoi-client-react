@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { GetState, Madoi, SetState, Share, ShareClass, TypedEventListener, TypedEventTarget } from "madoi-client";
+import { GetState, Madoi, SetState, Share, ShareClass } from "madoi-client";
+import { TypedCustomEventListenerOrObject, TypedCustomEventTarget } from "tcet";
 
 type Factory<T> = ()=>T;
 type ValueOrFactory<T> = T | Factory<T>;
@@ -149,9 +150,9 @@ export function useSharedModel<T>(madoi: Madoi, model: ValueOrFactory<T>, render
 
 export function eventListnersEffect<
         Handlers extends Record<string, Handler>,
-        Target extends TypedEventTarget<Target, Events>,
+        Target extends TypedCustomEventTarget<Target, Events>,
         Events extends Record<string, any>,
-        Handler extends TypedEventListener<Target, any>>(
+        Handler extends TypedCustomEventListenerOrObject<Target, any>>(
     target: Target, handlers: Handlers
 ){
     for(const key of Object.keys(handlers)){

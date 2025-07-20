@@ -50,11 +50,13 @@
   "devDependencies": {
     "@types/react": "^18.3.20",
     "@types/react-dom": "^18.3.6",
+    "madoi-client": "^0.1.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "typescript": "~5.8.3",
-    "vite": "^6.3.5",
-    "madoi-client": "^0.1.1"
+    "vite": "^6.3.5"
   },
-  "dependencies": {}
+  "dependencies": {
+    "tcet": "^1.0.1"
+  }
 }
