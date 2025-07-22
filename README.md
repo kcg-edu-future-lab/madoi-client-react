@@ -4,6 +4,10 @@ A React library for <a href="https://github.com/kcg-edu-future-lab/madoi">Distri
 
 <a href="https://github.com/kcg-edu-future-lab/madoi">分散共有基盤Madoi</a>のReact用クライアントライブラリ。
 
+[![Current Release](https://img.shields.io/npm/v/madoi-client-react.svg)](https://www.npmjs.com/package/madoi-client-react)
+[![Licence](https://img.shields.io/github/license/kcg-edu-future-lab/madoi-client-react.svg)](https://github.com/kcg-edu-future-lab/madoi-client-react/blob/master/LICENSE)
+
+
 ## Install
 
 ```bash
