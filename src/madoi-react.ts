@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { DecoratedMethod, GetState, Madoi, SetState, Share, ShareClass } from "madoi-client";
+import { ChangeState, ClassName, DecoratedMethod, Distributed, GetState, Madoi, SetState } from "madoi-client";
 import { TypedCustomEventListenerOrObject, TypedCustomEventTarget } from "tcet";
 
 // Decorator
-export function CauseStateChange(value: boolean = true) {
+export function SuppressRender() {
 	return (target: any, name: string, _descriptor: PropertyDescriptor) => {
-		target[name].madoiReactCauseStateChange_ = value;
+		target[name].madoiReactSuppressRender_ = {};
 	}
 }
 
@@ -41,7 +41,7 @@ function getOrApplyValue<T>(prev: T, vof: ValueOrFunction<T>){
 	return vof;
 }
 
-@ShareClass({className: "State"})
+@ClassName("MadoiReactInnerState")
 class State<T>{
 	private state: T;
 
@@ -49,7 +49,8 @@ class State<T>{
 		this.state = state;
 	}
 
-	@Share()
+	@Distributed()
+	@ChangeState()
 	updateState(value: T){
 		this.state = value;
 	}
@@ -93,7 +94,7 @@ export function useSharedState<T>(madoi: Madoi, initial: ValueOrFactory<T>): [T,
 		for(let p of Object.getOwnPropertyNames(Object.getPrototypeOf(obj))){
 			const cfg = obj[p].madoiMethodConfig_;
 			if(!cfg) continue;
-			if(cfg["share"]){
+			if(cfg["changeState"]){
 				const shareMethod = obj[p];
 				const f = function(){
  					shareMethod.apply(obj, arguments);
@@ -142,20 +143,21 @@ export function useSharedModel<T>(madoi: Madoi, model: ValueOrFactory<T>, render
 			}
 		}
 		for(let p of Object.getOwnPropertyNames(Object.getPrototypeOf(obj))){
-			let causeStateChange = obj[p].madoiReactCauseStateChange_;
-			if(causeStateChange === undefined){
-				causeStateChange = true;
+			let suppressRender = obj[p].madoiReactSuppressRender_;
+			if(typeof suppressRender === "undefined"){
+				suppressRender = false;
 			}
 			const cfg = (obj[p] as DecoratedMethod).madoiMethodConfig_;
 			if(!cfg) continue;
-			if(cfg["share"] || cfg["setState"] ||
+			if(cfg["distributed"] || cfg["changeState"] || cfg["setState"] ||
 					cfg["enterRoomAllowed"] || cfg["leaveRoomDone"] ||
 					cfg["peerEntered"] || cfg["peerProfileUpdated"] || cfg["peerLeaved"]){
 				const method = obj[p];
 				const f = function(){
-					let context: MadoiReactContext = {changed: causeStateChange};
+					let context: MadoiReactContext = {changed: !suppressRender};
 					method.apply(obj, [...arguments, context]);
-					if(renderOnStateChange && causeStateChange && context.changed){
+					if(renderOnStateChange && context.changed){
+						console.debug("[madoi-react] fire render for", obj, method.name, suppressRender);
 						if(getStateMethod){
 							setState(getStateMethod.apply(obj));
 						} else{
