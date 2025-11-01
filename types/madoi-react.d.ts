@@ -1,6 +1,6 @@
 import { Madoi } from "madoi-client";
 import { TypedCustomEventListenerOrObject, TypedCustomEventTarget } from "tcet";
-export declare function CauseStateChange(value?: boolean): (target: any, name: string, _descriptor: PropertyDescriptor) => void;
+export declare function SuppressRender(): (target: any, name: string, _descriptor: PropertyDescriptor) => void;
 /**
  * @EnterRoomAllowedなどのイベントデコレータが付与されたメソッドが呼び出される際に、
  * 引数に追加されるcontextオブジェクトのインタフェース。
