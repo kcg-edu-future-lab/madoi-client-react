@@ -51,10 +51,10 @@ function StateExample(){
 `useSharedState` は、手軽に利用できる反面、毎回状態を送信するため、サイズが大きい場合(例えば画像の場合)は通信コストが増大します。
 また、利用者間で状態変更操作が競合しやすいという欠点があります(例えば画像に対して2人が同時に描画した場合、後で描画した方の状態で上書きされてしまう)。
 
-次に紹介する `useSharedModel` は、状態の更新操作を個別に共有するため、競合の回避が行いやすい方式です。
+次に紹介する `useMadoiModel` は、状態の更新操作を個別に共有するため、競合の回避が行いやすい方式です。
 
 
-### Example for shared model (useSharedModel)
+### Example for shared model (useMadoiModel)
 
 ```jsx
 /*
@@ -87,7 +87,7 @@ class ChatLogs{
 function ModelExample(){
   const ctx = useContext(MadoiContext);
   const inputRef = useRef<HTMLInputElement>(null!);
-  const logs = useSharedModel(ctx.madoi, ()=>new ChatLogs());
+  const logs = useMadoiModel(ctx.madoi, ()=>new ChatLogs());
 
   const onSubmit: FormEventHandler = e=>{
     e.preventDefault();
@@ -107,7 +107,7 @@ function ModelExample(){
 }
 ```
 
-`useSharedModel` は、状態を保持し、かつ状態への変更操作を持っているオブジェクトを登録します。
+`useMadoiModel` は、状態を保持し、かつ状態への変更操作を持っているオブジェクトを登録します。
 登録したオブジェクトの`@Distributed()`が指定されたメソッドが実行されると、他の全てのアプリケーションでも実行されます。
 より厳密には、実行が`Madoi`ライブラリにより横取りされ、引数とともにサーバへ送信され、全てのアプリケーションに送信され、
 アプリケーションで受信した際にメソッドが実行されます。
