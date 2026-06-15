@@ -1,8 +1,5 @@
-var j = Object.defineProperty;
-var C = (t, e, r) => e in t ? j(t, e, { enumerable: !0, configurable: !0, writable: !0, value: r }) : t[e] = r;
-var O = (t, e, r) => C(t, typeof e != "symbol" ? e + "" : e, r);
-import { useRef as g, useState as _, useEffect as b } from "react";
-function m(t) {
+import { useRef as l, useState as O, useEffect as _ } from "react";
+function g(t) {
   return (e, r, a) => {
     e[r].madoiMethodConfig_ = {
       ...e[r].madoiMethodConfig_ ? e[r].madoiMethodConfig_ : {},
@@ -10,49 +7,49 @@ function m(t) {
     };
   };
 }
-function P(t) {
+function M(t) {
   return (e) => {
     e.madoiClassConfig_ = { className: t };
   };
 }
-const w = {
+const j = {
   serialized: !0
 };
-function R(t = w) {
-  return m({ distributed: t });
+function C(t = j) {
+  return g({ distributed: t });
 }
-function v() {
-  return m({ changeState: {} });
+function P() {
+  return g({ changeState: {} });
 }
-const E = {
+const w = {
   maxInterval: 5e3,
   minInterval: 3e3
 };
-function N(t = E) {
-  return m({ getState: t });
+function R(t = w) {
+  return g({ getState: t });
 }
-function x() {
-  return m({ setState: {} });
+function v() {
+  return g({ setState: {} });
 }
-var L = Object.defineProperty, D = Object.getOwnPropertyDescriptor, S = (t, e, r, a) => {
-  for (var i = a > 1 ? void 0 : a ? D(e, r) : e, d = t.length - 1, f; d >= 0; d--)
-    (f = t[d]) && (i = (a ? f(e, r, i) : f(i)) || i);
-  return a && i && L(e, r, i), i;
+var E = Object.defineProperty, N = Object.getOwnPropertyDescriptor, m = (t, e, r, a) => {
+  for (var s = a > 1 ? void 0 : a ? N(e, r) : e, p = t.length - 1, n; p >= 0; p--)
+    (n = t[p]) && (s = (a ? n(e, r, s) : n(s)) || s);
+  return a && s && E(e, r, s), s;
 };
-function z() {
+function D() {
   return (t, e, r) => {
     t[e].madoiReactSuppressRender_ = {};
   };
 }
-function M(t) {
+function b(t) {
   return typeof t == "function" ? t() : t;
 }
-function I(t, e) {
+function x(t, e) {
   return typeof e == "function" ? e(t) : e;
 }
-let l = class {
+let d = class {
+  state;
   constructor(t) {
-    O(this, "state");
     this.state = t;
   }
   updateState(t) {
@@ -65,86 +62,84 @@ let l = class {
     return this.state;
   }
 };
-S([
-  R(),
+m([
+  C(),
+  P()
+], d.prototype, "updateState", 1);
+m([
   v()
-], l.prototype, "updateState", 1);
-S([
-  x()
-], l.prototype, "setState", 1);
-S([
-  N()
-], l.prototype, "getState", 1);
-l = S([
-  P("MadoiReactInnerState")
-], l);
-function F(t, e) {
-  var f;
-  const r = g(null), a = g(null), [i, d] = _();
-  return r.current === null && (r.current = M(e)), b(() => {
+], d.prototype, "setState", 1);
+m([
+  R()
+], d.prototype, "getState", 1);
+d = m([
+  M("MadoiReactInnerState")
+], d);
+function I(t, e) {
+  const r = l(null), a = l(null), [s, p] = O();
+  return r.current === null && (r.current = b(e)), _(() => {
     if (a.current !== null) return;
-    const n = new l(r.current);
+    const n = new d(r.current);
     a.current = n;
-    let s = null;
-    for (let o of Object.getOwnPropertyNames(Object.getPrototypeOf(n))) {
-      const c = n[o].madoiMethodConfig_;
-      c && c.getState && (s = n[o]);
+    let o = null;
+    for (let i of Object.getOwnPropertyNames(Object.getPrototypeOf(n))) {
+      const c = n[i].madoiMethodConfig_;
+      c && c.getState && (o = n[i]);
     }
-    if (s == null)
+    if (o == null)
       throw new Error(`${typeof n} must declare @GetState method.`);
-    for (let o of Object.getOwnPropertyNames(Object.getPrototypeOf(n))) {
-      const c = n[o].madoiMethodConfig_;
+    for (let i of Object.getOwnPropertyNames(Object.getPrototypeOf(n))) {
+      const c = n[i].madoiMethodConfig_;
       if (c) {
         if (c.changeState) {
-          const u = n[o], p = function() {
-            u.apply(n, arguments), d(s.apply(n));
+          const f = n[i], u = function() {
+            f.apply(n, arguments), p(o.apply(n));
           };
-          p.madoiMethodConfig_ = c, n[o] = p;
+          u.madoiMethodConfig_ = c, n[i] = u;
         } else if (c.setState) {
-          const u = n[o], p = function() {
-            u.apply(n, arguments), d(s.apply(n));
+          const f = n[i], u = function() {
+            f.apply(n, arguments), p(o.apply(n));
           };
-          p.madoiMethodConfig_ = c, n[o] = p;
+          u.madoiMethodConfig_ = c, n[i] = u;
         }
       }
     }
     t.register(n);
   }, []), [
-    ((f = a.current) == null ? void 0 : f.getState()) || r.current,
+    a.current?.getState() || r.current,
     (n) => {
-      var s, o;
-      (o = a.current) == null || o.updateState(
-        I((s = a.current) == null ? void 0 : s.getState(), n)
+      a.current?.updateState(
+        x(a.current?.getState(), n)
       );
     }
   ];
 }
-function G(t, e, r = !0) {
-  const a = g(null), i = g(!1), [d, f] = _();
-  return a.current === null && (a.current = M(e)), b(() => {
-    if (i.current) return;
-    const n = a.current;
-    let s = null;
-    for (let o of Object.getOwnPropertyNames(Object.getPrototypeOf(n))) {
-      const c = n[o].madoiMethodConfig_;
-      c && c.getState && (s = n[o]);
+function V(t, e, r = !0) {
+  const a = l(null), s = l(!1), [p, n] = O();
+  return a.current === null && (a.current = b(e)), _(() => {
+    if (s.current) return;
+    const o = a.current;
+    let i = null;
+    for (let c of Object.getOwnPropertyNames(Object.getPrototypeOf(o))) {
+      const f = o[c].madoiMethodConfig_;
+      f && f.getState && (i = o[c]);
     }
-    for (let o of Object.getOwnPropertyNames(Object.getPrototypeOf(n))) {
-      let c = n[o].madoiReactSuppressRender_;
-      typeof c > "u" && (c = !1);
-      const u = n[o].madoiMethodConfig_;
+    for (let c of Object.getOwnPropertyNames(Object.getPrototypeOf(o))) {
+      let f = o[c].madoiReactSuppressRender_;
+      typeof f > "u" && (f = !1);
+      const u = o[c].madoiMethodConfig_;
       if (u && (u.distributed || u.changeState || u.setState || u.enterRoomAllowed || u.leaveRoomDone || u.peerEntered || u.peerProfileUpdated || u.peerLeaved)) {
-        const p = n[o], h = function() {
-          let y = { changed: !c };
-          p.apply(n, [...arguments, y]), r && y.changed && (console.debug("[madoi-react] fire render for", n, p.name, c), f(s ? s.apply(n) : new Object()));
+        const S = o[c], h = function() {
+          let y = { changed: !f };
+          S.apply(o, [...arguments, y]), r && y.changed && (console.debug("[madoi-react] fire render for", o, S.name, f), n(i ? i.apply(o) : new Object()));
         };
-        h.madoiMethodConfig_ = u, n[o] = h;
+        h.madoiMethodConfig_ = u, o[c] = h;
       }
     }
-    t.register(n), i.current = !0;
+    t.register(o), s.current = !0;
   }, []), a.current;
 }
-function H(t, e) {
+function A(t, e) {
   for (const r of Object.keys(e))
     t.addEventListener(r, e[r]);
   return () => {
@@ -152,13 +147,13 @@ function H(t, e) {
       t.removeEventListener(r, e[r]);
   };
 }
-function J(...t) {
+function z(...t) {
   return () => t.forEach((e) => e());
 }
 export {
-  z as SuppressRender,
-  J as bundleCleanups,
-  H as eventListnersEffect,
-  G as useMadoiModel,
-  F as useSharedState
+  D as SuppressRender,
+  z as bundleCleanups,
+  A as eventListnersEffect,
+  V as useMadoiModel,
+  I as useSharedState
 };

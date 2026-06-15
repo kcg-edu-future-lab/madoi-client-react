@@ -53,8 +53,8 @@
     "madoi-client": "^0.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "typescript": "~5.8.3",
-    "vite": "^6.3.5"
+    "typescript": "~6.0.3",
+    "vite": "^7.3.5"
   },
   "dependencies": {
     "tcet": "^1.0.1"
