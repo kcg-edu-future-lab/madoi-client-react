@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { ChangeState, ClassName, DecoratedMethod, Distributed, GetState, Madoi, SetState } from "madoi-client";
-import { TypedCustomEventListenerOrObject, TypedCustomEventTarget } from "tcet";
+import { ChangeState, ClassName, type DecoratedMethod, Distributed, GetState, Madoi, type Profile, SetState } from "madoi-client";
+import { type ListenerFor, type TypedCustomEventListenerOrEventListenerObject, TypedCustomEventTarget } from "tcet";
 
 // Decorator
 export function SuppressRender() {
@@ -122,7 +122,7 @@ export function useSharedState<T>(madoi: Madoi, initial: ValueOrFactory<T>): [T,
 			getOrApplyValue(target.current?.getState(), vof))}];
 }
 
-export function useMadoiModel<T>(madoi: Madoi, model: ValueOrFactory<T>, renderOnStateChange = true): T {
+export function useMadoiModel<T>(madoi: Madoi<any, any>, model: ValueOrFactory<T>, renderOnStateChange = true): T {
 	const target = useRef<T>(null!);
 	const registered = useRef(false);
 	const [_state, setState] = useState<any>();
@@ -176,20 +176,48 @@ export function useMadoiModel<T>(madoi: Madoi, model: ValueOrFactory<T>, renderO
 	return target.current;
 }
 
-export function eventListnersEffect<
-		Target extends TypedCustomEventTarget<Target, Events>,
-		Events extends Record<string, any>,
-		Event extends keyof Events & string,
-		Handlers extends Record<Event, Handler>,
-		Handler extends TypedCustomEventListenerOrObject<Target, Events[Event]>>(
-	target: Target, handlers: Handlers
+export function useSelfPeer(madoi: Madoi){
+    const [_, setRenderRequired] = useState(new Object());
+
+	const peerProfileUpdated: ListenerFor<Madoi, "peerProfileUpdated"> = ({detail: {peerId}})=>{
+		if(peerId !== madoi.getSelfPeer().id) return;
+		setRenderRequired(new Object());
+	}
+
+	useEffect(()=>{
+        return eventListnersEffect(madoi, {peerProfileUpdated});
+	})
+
+	return madoi.getSelfPeer();
+}
+
+export function useOtherPeers<TP extends Profile, TR extends Profile>(madoi: Madoi<TP, TR>){
+    const [_, setRenderRequired] = useState(new Object());
+
+    const peerEntered = ()=>setRenderRequired(new Object());
+    const peerLeaved = ()=>setRenderRequired(new Object());
+    const peerProfileUpdated: ListenerFor<Madoi, "peerProfileUpdated"> = ({detail: {peerId}})=>{
+		if(peerId === madoi.getSelfPeer().id) return;
+		setRenderRequired(new Object());
+	}
+
+    useEffect(()=>{
+        return eventListnersEffect(madoi, {peerEntered, peerLeaved, peerProfileUpdated});
+    });
+
+    return madoi.getOtherPeers();
+}
+
+
+export function eventListnersEffect<Target extends TypedCustomEventTarget<any, any>>(
+	target: Target, handlers: Record<string, TypedCustomEventListenerOrEventListenerObject<any, any>>
 ){
 	for(const key of Object.keys(handlers)){
-		target.addEventListener(key as Event, handlers[key as Event]);
+		target.addEventListener(key, handlers[key]);
 	}
 	return ()=>{
 		for(const key of Object.keys(handlers)){
-			target.removeEventListener(key as Event, handlers[key as Event]);
+			target.removeEventListener(key, handlers[key]);
 		}    
 	};
 }

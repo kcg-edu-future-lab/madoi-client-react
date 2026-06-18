@@ -1,5 +1,5 @@
-import { Madoi } from "madoi-client";
-import { TypedCustomEventListenerOrObject, TypedCustomEventTarget } from "tcet";
+import { Madoi, type Profile } from "madoi-client";
+import { type TypedCustomEventListenerOrEventListenerObject, TypedCustomEventTarget } from "tcet";
 export declare function SuppressRender(): (target: any, name: string, _descriptor: PropertyDescriptor) => void;
 /**
  * @EnterRoomAllowedなどのイベントデコレータが付与されたメソッドが呼び出される際に、
@@ -19,8 +19,10 @@ type ValueOrFactory<T> = T | Factory<T>;
 type Function<T> = (perv: T) => T;
 type ValueOrFunction<T> = T | Function<T>;
 export declare function useSharedState<T>(madoi: Madoi, initial: ValueOrFactory<T>): [T, (v: ValueOrFunction<T>) => void];
-export declare function useMadoiModel<T>(madoi: Madoi, model: ValueOrFactory<T>, renderOnStateChange?: boolean): T;
-export declare function eventListnersEffect<Target extends TypedCustomEventTarget<Target, Events>, Events extends Record<string, any>, Event extends keyof Events & string, Handlers extends Record<Event, Handler>, Handler extends TypedCustomEventListenerOrObject<Target, Events[Event]>>(target: Target, handlers: Handlers): () => void;
+export declare function useMadoiModel<T>(madoi: Madoi<any, any>, model: ValueOrFactory<T>, renderOnStateChange?: boolean): T;
+export declare function useSelfPeer(madoi: Madoi): import("madoi-client").PeerInfo<{}>;
+export declare function useOtherPeers<TP extends Profile, TR extends Profile>(madoi: Madoi<TP, TR>): import("madoi-client").PeerInfo<TP>[];
+export declare function eventListnersEffect<Target extends TypedCustomEventTarget<any, any>>(target: Target, handlers: Record<string, TypedCustomEventListenerOrEventListenerObject<any, any>>): () => void;
 export declare function bundleCleanups(...cleanups: (() => void)[]): () => void;
 export {};
 //# sourceMappingURL=madoi-react.d.ts.map
