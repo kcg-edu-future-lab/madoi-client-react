@@ -120,6 +120,36 @@ function ModelExample(){
 これにより、チャットログの追加や画像への描画など、異なるアプリケーションで同時に起こりうる操作を、
 取りこぼすことなくオブジェクトに反映できます。
 
+## Viteでの設定例
+
+残念ながら TypeScript のデコレータは、すべてのビルドツールでデフォルトでサポートされているわけではなく、デコレータを使用したコードを正しくビルドし実行するには、追加の設定が必要な場合があります。Viteでreact-swcプラグインを使用する場合の設定を以下に示します。
+
+```vite.config.ts
+import { defineConfig } from 'vite'
+import react from "@vitejs/plugin-react-swc"
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react({
+    useAtYourOwnRisk_mutateSwcOptions(options) {
+      options.jsc!.parser!.decorators = true
+      options.jsc!.transform!.decoratorVersion = '2022-03'
+    },
+  })]
+})
+```
+
+上記設定は、以下のバージョンで動作を確認しています。
+
+* vite 7.1.7
+* @vitejs/plugin-react-swc 4.1.0
+* typescript 6.0.3
+
+また、最新のViteでも動作します。
+
+* vite 8.0.16
+* @vitejs/plugin-react-swc 4.3.1
+* typescript 6.0.3
 
 ## まとめ
 
