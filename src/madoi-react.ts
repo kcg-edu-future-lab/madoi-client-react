@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ChangeState, ClassName, type DecoratedMethod, Distributed, GetState, Madoi, type Profile, SetState } from "madoi-client";
-import { type ListenerFor, type TypedCustomEventListenerOrEventListenerObject, TypedCustomEventTarget } from "tcet";
+import { KeyOf, type ListenerFor, TypedCustomEventTarget } from "tcet";
 
 // Decorator
 export function SuppressRender() {
@@ -177,15 +177,15 @@ export function useMadoiModel<T>(madoi: Madoi<any, any>, model: ValueOrFactory<T
 }
 
 export function useSelfPeer<TP extends Profile, TR extends Profile>(madoi: Madoi<TP, TR>){
-	const [_, setRenderRequired] = useState(new Object());
+	const kick = useKickRender();
 
 	const peerProfileUpdated: ListenerFor<Madoi, "peerProfileUpdated"> = ({detail: {peerId}})=>{
 		if(peerId !== madoi.getSelfPeer().id) return;
-		setRenderRequired(new Object());
+		kick();
 	}
 
 	useEffect(()=>{
-		return eventListnersEffect(madoi, {peerProfileUpdated});
+		return eventListnersEffect(madoi, {enterRoomAllowed: kick, peerProfileUpdated});
 	}, [])
 
 	return madoi.getSelfPeer();
@@ -214,8 +214,12 @@ export function useOtherPeers<TP extends Profile, TR extends Profile>(madoi: Mad
 }
 
 
-export function eventListnersEffect<Target extends TypedCustomEventTarget<any, any>>(
-	target: Target, handlers: Record<string, TypedCustomEventListenerOrEventListenerObject<any, any>>
+export function eventListnersEffect<
+	Target extends TypedCustomEventTarget<any, Events>,
+	Events extends Record<string, any>
+>(
+	target: Target,
+	handlers: Record<KeyOf<Events>, ListenerFor<any, any>>
 ){
 	for(const key of Object.keys(handlers)){
 		target.addEventListener(key, handlers[key]);
