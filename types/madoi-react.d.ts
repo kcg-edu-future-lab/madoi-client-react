@@ -20,7 +20,7 @@ type Function<T> = (perv: T) => T;
 type ValueOrFunction<T> = T | Function<T>;
 export declare function useSharedState<T>(madoi: Madoi, initial: ValueOrFactory<T>): [T, (v: ValueOrFunction<T>) => void];
 export declare function useMadoiModel<T>(madoi: Madoi<any, any>, model: ValueOrFactory<T>, renderOnStateChange?: boolean): T;
-export declare function useSelfPeer(madoi: Madoi): import("madoi-client").PeerInfo<{}>;
+export declare function useSelfPeer<TP extends Profile, TR extends Profile>(madoi: Madoi<TP, TR>): import("madoi-client").PeerInfo<TP>;
 export declare function useKickRender(): () => void;
 export declare function useOtherPeers<TP extends Profile, TR extends Profile>(madoi: Madoi<TP, TR>): import("madoi-client").PeerInfo<TP>[];
 export declare function eventListnersEffect<Target extends TypedCustomEventTarget<any, any>>(target: Target, handlers: Record<string, TypedCustomEventListenerOrEventListenerObject<any, any>>): () => void;

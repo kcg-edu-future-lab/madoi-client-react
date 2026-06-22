@@ -32,11 +32,11 @@ function E() {
   return m({ setState: {} });
 }
 var L = Object.defineProperty, N = Object.getOwnPropertyDescriptor, O = (e, t, n, o) => {
-  for (var i = o > 1 ? void 0 : o ? N(t, n) : t, l = e.length - 1, r; l >= 0; l--)
-    (r = e[l]) && (i = (o ? r(t, n, i) : r(i)) || i);
-  return o && i && L(t, n, i), i;
+  for (var s = o > 1 ? void 0 : o ? N(t, n) : t, d = e.length - 1, r; d >= 0; d--)
+    (r = e[d]) && (s = (o ? r(t, n, s) : r(s)) || s);
+  return o && s && L(t, n, s), s;
 };
-function x() {
+function A() {
   return (e, t, n) => {
     e[t].madoiReactSuppressRender_ = {};
   };
@@ -44,10 +44,10 @@ function x() {
 function b(e) {
   return typeof e == "function" ? e() : e;
 }
-function A(e, t) {
+function U(e, t) {
   return typeof t == "function" ? t(e) : t;
 }
-let d = class {
+let l = class {
   state;
   constructor(e) {
     this.state = e;
@@ -65,42 +65,42 @@ let d = class {
 O([
   M(),
   R()
-], d.prototype, "updateState", 1);
+], l.prototype, "updateState", 1);
 O([
   E()
-], d.prototype, "setState", 1);
+], l.prototype, "setState", 1);
 O([
   v()
-], d.prototype, "getState", 1);
-d = O([
+], l.prototype, "getState", 1);
+l = O([
   j("MadoiReactInnerState")
-], d);
+], l);
 function D(e, t) {
-  const n = p(null), o = p(null), [i, l] = g();
+  const n = p(null), o = p(null), [s, d] = g();
   return n.current === null && (n.current = b(t)), S(() => {
     if (o.current !== null) return;
-    const r = new d(n.current);
+    const r = new l(n.current);
     o.current = r;
-    let c = null;
+    let u = null;
     for (let a of Object.getOwnPropertyNames(Object.getPrototypeOf(r))) {
-      const u = r[a].madoiMethodConfig_;
-      u && u.getState && (c = r[a]);
+      const c = r[a].madoiMethodConfig_;
+      c && c.getState && (u = r[a]);
     }
-    if (c == null)
+    if (u == null)
       throw new Error(`${typeof r} must declare @GetState method.`);
     for (let a of Object.getOwnPropertyNames(Object.getPrototypeOf(r))) {
-      const u = r[a].madoiMethodConfig_;
-      if (u) {
-        if (u.changeState) {
-          const f = r[a], s = function() {
-            f.apply(r, arguments), l(c.apply(r));
+      const c = r[a].madoiMethodConfig_;
+      if (c) {
+        if (c.changeState) {
+          const f = r[a], i = function() {
+            f.apply(r, arguments), d(u.apply(r));
           };
-          s.madoiMethodConfig_ = u, r[a] = s;
-        } else if (u.setState) {
-          const f = r[a], s = function() {
-            f.apply(r, arguments), l(c.apply(r));
+          i.madoiMethodConfig_ = c, r[a] = i;
+        } else if (c.setState) {
+          const f = r[a], i = function() {
+            f.apply(r, arguments), d(u.apply(r));
           };
-          s.madoiMethodConfig_ = u, r[a] = s;
+          i.madoiMethodConfig_ = c, r[a] = i;
         }
       }
     }
@@ -109,56 +109,56 @@ function D(e, t) {
     o.current?.getState() || n.current,
     (r) => {
       o.current?.updateState(
-        A(o.current?.getState(), r)
+        U(o.current?.getState(), r)
       );
     }
   ];
 }
 function I(e, t, n = !0) {
-  const o = p(null), i = p(!1), [l, r] = g();
+  const o = p(null), s = p(!1), [d, r] = g();
   return o.current === null && (o.current = b(t)), S(() => {
-    if (i.current) return;
-    const c = o.current;
+    if (s.current) return;
+    const u = o.current;
     let a = null;
-    for (let u of Object.getOwnPropertyNames(Object.getPrototypeOf(c))) {
-      const f = c[u].madoiMethodConfig_;
-      f && f.getState && (a = c[u]);
+    for (let c of Object.getOwnPropertyNames(Object.getPrototypeOf(u))) {
+      const f = u[c].madoiMethodConfig_;
+      f && f.getState && (a = u[c]);
     }
-    for (let u of Object.getOwnPropertyNames(Object.getPrototypeOf(c))) {
-      let f = c[u].madoiReactSuppressRender_;
+    for (let c of Object.getOwnPropertyNames(Object.getPrototypeOf(u))) {
+      let f = u[c].madoiReactSuppressRender_;
       typeof f > "u" && (f = !1);
-      const s = c[u].madoiMethodConfig_;
-      if (s && (s.distributed || s.changeState || s.setState || s.enterRoomAllowed || s.leaveRoomDone || s.peerEntered || s.peerProfileUpdated || s.peerLeaved)) {
-        const h = c[u], y = function() {
+      const i = u[c].madoiMethodConfig_;
+      if (i && (i.distributed || i.changeState || i.setState || i.enterRoomAllowed || i.leaveRoomDone || i.peerEntered || i.peerProfileUpdated || i.peerLeaved)) {
+        const h = u[c], y = function() {
           let _ = { changed: !f };
-          h.apply(c, [...arguments, _]), n && _.changed && (console.debug("[madoi-react] fire render for", c, h.name, f), r(a ? a.apply(c) : new Object()));
+          h.apply(u, [...arguments, _]), n && _.changed && (console.debug("[madoi-react] fire render for", u, h.name, f), r(a ? a.apply(u) : new Object()));
         };
-        y.madoiMethodConfig_ = s, c[u] = y;
+        y.madoiMethodConfig_ = i, u[c] = y;
       }
     }
-    e.register(c), i.current = !0;
+    e.register(u), s.current = !0;
   }, []), o.current;
 }
 function V(e) {
-  const [t, n] = g(new Object()), o = ({ detail: { peerId: i } }) => {
-    i === e.getSelfPeer().id && n(new Object());
+  const [t, n] = g(new Object()), o = ({ detail: { peerId: s } }) => {
+    s === e.getSelfPeer().id && n(new Object());
   };
-  return S(() => P(e, { peerProfileUpdated: o })), e.getSelfPeer();
+  return S(() => P(e, { peerProfileUpdated: o }), []), e.getSelfPeer();
 }
-function U() {
+function k() {
   const [e, t] = g(new Object());
   return () => t(new Object());
 }
 function q(e) {
-  const t = U(), n = ({ detail: { peerId: o } }) => {
+  const t = k(), n = ({ detail: { peerId: o } }) => {
     o !== e.getSelfPeer().id && t();
   };
-  return console.log("useOtherPeers"), S(() => P(
-    e,
-    { enterRoomAllowed: () => {
-      console.log("enterRoomAllowed"), t();
-    }, peerEntered: t, peerLeaved: t, peerProfileUpdated: n }
-  )), e.getOtherPeers();
+  return S(() => P(e, {
+    enterRoomAllowed: t,
+    peerEntered: t,
+    peerLeaved: t,
+    peerProfileUpdated: n
+  }), []), e.getOtherPeers();
 }
 function P(e, t) {
   for (const n of Object.keys(t))
@@ -172,10 +172,10 @@ function $(...e) {
   return () => e.forEach((t) => t());
 }
 export {
-  x as SuppressRender,
+  A as SuppressRender,
   $ as bundleCleanups,
   P as eventListnersEffect,
-  U as useKickRender,
+  k as useKickRender,
   I as useMadoiModel,
   q as useOtherPeers,
   V as useSelfPeer,
