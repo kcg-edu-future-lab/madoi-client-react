@@ -191,18 +191,23 @@ export function useSelfPeer(madoi: Madoi){
 	return madoi.getSelfPeer();
 }
 
-export function useOtherPeers<TP extends Profile, TR extends Profile>(madoi: Madoi<TP, TR>){
+export function useKickRender(){
     const [_, setRenderRequired] = useState(new Object());
+    return ()=>setRenderRequired(new Object());
+}
 
-    const peerEntered = ()=>setRenderRequired(new Object());
-    const peerLeaved = ()=>setRenderRequired(new Object());
+export function useOtherPeers<TP extends Profile, TR extends Profile>(madoi: Madoi<TP, TR>){
+    const kick = useKickRender();
     const peerProfileUpdated: ListenerFor<Madoi, "peerProfileUpdated"> = ({detail: {peerId}})=>{
 		if(peerId === madoi.getSelfPeer().id) return;
-		setRenderRequired(new Object());
+		kick();
 	}
+    console.log("useOtherPeers");
 
     useEffect(()=>{
-        return eventListnersEffect(madoi, {peerEntered, peerLeaved, peerProfileUpdated});
+        return eventListnersEffect(madoi,
+            {enterRoomAllowed: ()=>{
+                console.log("enterRoomAllowed"); kick();}, peerEntered: kick, peerLeaved: kick, peerProfileUpdated});
     });
 
     return madoi.getOtherPeers();
