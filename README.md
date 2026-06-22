@@ -133,7 +133,7 @@ export default defineConfig({
   plugins: [react({
     useAtYourOwnRisk_mutateSwcOptions(options) {
       options.jsc!.parser!.decorators = true
-      options.jsc!.transform!.decoratorVersion = '2022-03'
+      options.jsc!.transform!.decoratorVersion = 'lagacy'
     },
   })]
 })
