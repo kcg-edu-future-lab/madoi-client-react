@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ChangeState, ClassName, type DecoratedMethod, Distributed, GetState, Madoi, type Profile, SetState } from "madoi-client";
+import { ChangeState, ClassName, type DecoratedMethod, Distributed, EnterRoomAllowedDetail, GetState, Madoi, PeerEnteredDetail, PeerInfo, PeerLeavedDetail, PeerProfileUpdatedDetail, type Profile, RoomInfo, RoomProfileUpdatedDetail, SetState } from "madoi-client";
 import { KeyOf, type ListenerFor, TypedCustomEventTarget } from "tcet";
 
 // Decorator
@@ -176,43 +176,78 @@ export function useMadoiModel<T>(madoi: Madoi<any, any>, model: ValueOrFactory<T
 	return target.current;
 }
 
-export function useSelfPeer<TP extends Profile, TR extends Profile>(madoi: Madoi<TP, TR>){
-	const kick = useKickRender();
-
-	const peerProfileUpdated: ListenerFor<Madoi, "peerProfileUpdated"> = ({detail: {peerId}})=>{
-		if(peerId !== madoi.getSelfPeer().id) return;
-		kick();
-	}
-
-	useEffect(()=>{
-		return eventListnersEffect(madoi, {enterRoomAllowed: kick, peerProfileUpdated});
-	}, [])
-
-	return madoi.getSelfPeer();
-}
-
 export function useKickRender(){
     const [_, setRenderRequired] = useState(new Object());
     return ()=>setRenderRequired(new Object());
 }
 
-export function useOtherPeers<TP extends Profile, TR extends Profile>(madoi: Madoi<TP, TR>){
+export function useSelfPeer<TP extends Profile, TR extends Profile>(
+	madoi: Madoi<TP, TR>,
+	updated?: (peer: PeerInfo<TP>,
+		event: EnterRoomAllowedDetail<TP, TR> | PeerProfileUpdatedDetail<TP>)=>void
+){
 	const kick = useKickRender();
 
-	const peerProfileUpdated: ListenerFor<Madoi, "peerProfileUpdated"> = ({detail: {peerId}})=>{
-		if(peerId === madoi.getSelfPeer().id) return;
+	const enterRoomAllowed: ListenerFor<Madoi<TP, TR>, "enterRoomAllowed"> = ({detail})=>{
+		if(updated) updated(madoi.getSelfPeer(), detail);
 		kick();
-	}
+	};
+	const peerProfileUpdated: ListenerFor<Madoi, "peerProfileUpdated"> = ({detail})=>{
+		if(detail.peerId !== madoi.getSelfPeer().id) return;
+		if(updated) updated(madoi.getSelfPeer(), detail);
+		kick();
+	};
+
+	useEffect(()=>{
+		return eventListnersEffect(madoi, {enterRoomAllowed, peerProfileUpdated});
+	}, []);
+
+	return madoi.getSelfPeer();
+}
+
+type UseOtherPeersEventDetails<TP extends Profile, TR extends Profile> =
+	EnterRoomAllowedDetail<TP, TR> | PeerEnteredDetail<TP> |
+	PeerLeavedDetail | PeerProfileUpdatedDetail<TP>;
+export function useOtherPeers<TP extends Profile, TR extends Profile>(
+	madoi: Madoi<TP, TR>,
+	updated?: (otherPeers: PeerInfo<TP>[], detail: UseOtherPeersEventDetails<TP, TR>)=>void
+){
+	const kick = useKickRender();
+
+	const listener = ({detail}: {detail: UseOtherPeersEventDetails<TP, TR>})=>{
+		if(updated) updated(madoi.getOtherPeers(), detail);
+		kick();
+	};
 
 	useEffect(()=>{
 		return eventListnersEffect(madoi, {
-			enterRoomAllowed: kick, peerEntered: kick,
-			peerLeaved: kick, peerProfileUpdated});
+			enterRoomAllowed: listener, peerEntered: listener,
+			peerLeaved: listener, peerProfileUpdated: listener});
 	}, []);
 
 	return madoi.getOtherPeers();
 }
 
+export function useRoom<TP extends Profile, TR extends Profile>(
+	madoi: Madoi<TP, TR>,
+	updated?: (room: RoomInfo<TR>, detail: EnterRoomAllowedDetail<TP, TR> | RoomProfileUpdatedDetail<TR>)=>void
+){
+	const kick = useKickRender();
+
+	const enterRoomAllowed: ListenerFor<Madoi<TP, TR>, "enterRoomAllowed"> = ({detail})=>{
+		if(updated) updated(madoi.getRoom(), detail);
+		kick();
+	};
+	const roomProfileUpdated: ListenerFor<Madoi<TP, TR>, "roomProfileUpdated"> = ({detail})=>{
+		if(updated) updated(madoi.getRoom(), detail);
+		kick();
+	};
+
+	useEffect(()=>{
+		return eventListnersEffect(madoi, {enterRoomAllowed, roomProfileUpdated});
+	}, []);
+
+	return madoi.getSelfPeer();}
 
 export function eventListnersEffect<
 	Target extends TypedCustomEventTarget<any, Events>,
